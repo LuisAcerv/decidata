@@ -12,11 +12,11 @@ import {
 import DetectionsContext from "../../../context/context";
 
 const styles = {
-  container: { margin: "0 auto" },
+  container: { margin: "0 auto", width: `${window.innerWidth - 100}px` },
   chart: {
     top: 5,
     right: 30,
-    left: 30,
+    left: -20,
     bottom: 5,
   },
 };
