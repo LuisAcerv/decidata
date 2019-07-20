@@ -9,6 +9,10 @@ export default class DetectionsProvider extends Component {
       dataSource: [],
     },
     channelWithMoreDetections: "",
+    brandWithMoreDetections: "",
+    commercialWithMoreDetections: "",
+    dateWithMoreDetections: "",
+    chartData: [],
   };
 
   componentDidMount() {
@@ -28,11 +32,18 @@ export default class DetectionsProvider extends Component {
       // Map data in order to add the key index to the object
       const dataSource = this.mapDataSource(resp.data);
 
-      // Map channels
-      console.log(this.getChannelWithMoreDetections(resp.data));
-      console.log(this.getBrandWithMoreDetections(resp.data));
-      console.log(this.getCommercialWithMoreDetections(resp.data));
-      console.log(this.getDatWithMoreDetections(resp.data));
+      const channelWithMoreDetections = this.getChannelWithMoreDetections(
+        resp.data
+      );
+      const brandWithMoreDetections = this.getBrandWithMoreDetections(
+        resp.data
+      );
+      const commercialWithMoreDetections = this.getCommercialWithMoreDetections(
+        resp.data
+      );
+      const dateWithMoreDetections = this.getDateWithMoreDetections(resp.data);
+
+      const chartData = this.getChartData(resp.data);
 
       // Save processed data to the state
       this.setState(data => ({
@@ -45,6 +56,11 @@ export default class DetectionsProvider extends Component {
             return new Date(b.date) - new Date(a.date);
           }),
         },
+        channelWithMoreDetections,
+        brandWithMoreDetections,
+        commercialWithMoreDetections,
+        dateWithMoreDetections,
+        chartData,
       }));
     });
   };
@@ -87,7 +103,13 @@ export default class DetectionsProvider extends Component {
         counts[channel] = (counts[channel] || 0) + 1;
       });
     }
-    return counts;
+
+    const arr = Object.keys(counts).map(key => {
+      return { name: key, count: counts[key] };
+    });
+
+    const max = arr.reduce((l, e) => (e.count > l.count ? e : l));
+    return max;
   };
 
   getBrandWithMoreDetections = data => {
@@ -97,7 +119,13 @@ export default class DetectionsProvider extends Component {
         counts[brand] = (counts[brand] || 0) + 1;
       });
     }
-    return counts;
+
+    const arr = Object.keys(counts).map(key => {
+      return { name: key, count: counts[key] };
+    });
+
+    const max = arr.reduce((l, e) => (e.count > l.count ? e : l));
+    return max;
   };
 
   getCommercialWithMoreDetections = data => {
@@ -107,10 +135,16 @@ export default class DetectionsProvider extends Component {
         counts[commercial] = (counts[commercial] || 0) + 1;
       });
     }
-    return counts;
+
+    const arr = Object.keys(counts).map(key => {
+      return { name: key, count: counts[key] };
+    });
+
+    const max = arr.reduce((l, e) => (e.count > l.count ? e : l));
+    return max;
   };
 
-  getDatWithMoreDetections = data => {
+  getDateWithMoreDetections = data => {
     const counts = {};
     if (data) {
       data.map(({ date }) => {
@@ -118,7 +152,29 @@ export default class DetectionsProvider extends Component {
         counts[d] = (counts[d] || 0) + 1;
       });
     }
-    return counts;
+
+    const arr = Object.keys(counts).map(key => {
+      return { name: key, count: counts[key] };
+    });
+
+    const max = arr.reduce((l, e) => (e.count > l.count ? e : l));
+    return max;
+  };
+
+  getChartData = data => {
+    const counts = {};
+    if (data) {
+      data.map(({ date }) => {
+        const d = date.split(" ")[0];
+        counts[d] = (counts[d] || 0) + 1;
+      });
+    }
+
+    const arr = Object.keys(counts).map(key => {
+      return { name: key, detections: parseInt(counts[key]) };
+    });
+
+    return arr;
   };
 
   render() {
@@ -126,7 +182,11 @@ export default class DetectionsProvider extends Component {
       <DetectionsContext.Provider
         value={{
           detections: this.state.detections,
-          channelWithMoreViews: this.state.channelWithMoreViews,
+          channelWithMoreDetections: this.state.channelWithMoreDetections,
+          brandWithMoreDetections: this.state.brandWithMoreDetections,
+          commercialWithMoreDetections: this.state.commercialWithMoreDetections,
+          dateWithMoreDetections: this.state.dateWithMoreDetections,
+          chartData: this.state.chartData,
         }}
       >
         {this.props.children}
