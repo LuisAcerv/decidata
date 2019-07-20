@@ -1,0 +1,8 @@
+# api
+api/env
+
+# client
+client/node_modules
+client/dist
+client/coverage
+client/.cache

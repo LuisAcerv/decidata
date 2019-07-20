@@ -1,0 +1,16 @@
+version: "3.5"
+
+services:
+  web:
+    container_name: web
+    #restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ".:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    ports:
+      - "1234:1234"
+    environment:
+      - NODE_ENV=development
