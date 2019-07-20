@@ -1,7 +1,7 @@
 import React from "react";
-import { Layout } from 'antd';
+import { Layout, Icon } from "antd";
 
-const { Header, Footer, Content } = Layout;
+const { Footer, Content } = Layout;
 
 
 export default () => {
