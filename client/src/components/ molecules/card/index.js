@@ -4,6 +4,7 @@ import { Card } from "antd";
 const style = {
   borderRadius: "30px",
   boxShadow: "2px 2px 6px rgba(0,0,0,0.2)",
+  textAlign: "center",
 };
 
 export default ({ title, content }) => (
