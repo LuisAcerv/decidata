@@ -14,7 +14,9 @@ export default () => {
     <DetectionsContext.Consumer>
       {context => (
         <div data={context} style={table}>
-          <p>Detections</p>
+          <p>
+            <b>List of detections</b>
+          </p>
           <Table
             dataSource={context.detections.dataSource}
             columns={context.detections.columns}
