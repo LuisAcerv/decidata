@@ -3,6 +3,7 @@ import { Layout, Icon } from "antd";
 
 const { Footer, Content } = Layout;
 
+export default props => {
 
 export default () => {
   return <div>
