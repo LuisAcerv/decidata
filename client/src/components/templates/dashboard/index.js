@@ -15,11 +15,23 @@ export default props => {
     },
   };
 
-export default () => {
-  return <div>
-      <Layout>
-  <Header>Header</Header>
-  <Content>Content</Content>
-  <Footer>Footer</Footer>
-</Layout></div>;
+  const { layout, footer } = styles;
+
+  return (
+    <div>
+      <Layout style={layout}>
+        <Content>{props.children}</Content>
+        <Footer style={footer}>
+          By&nbsp;
+          <a href="https://medium.com/@luiacerv" target="__blank">
+            Luis Acerv
+          </a>
+          &nbsp;
+          <a href="https://github.com/LuisAcerv" target="__blank">
+            <Icon type="github" />
+          </a>
+        </Footer>
+      </Layout>
+    </div>
+  );
 };
