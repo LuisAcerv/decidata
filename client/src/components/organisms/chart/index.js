@@ -25,6 +25,9 @@ const { container, chart } = styles;
 export default () => {
   return (
     <div style={container}>
+          <p>
+            <b>Number of detections per day</b>
+          </p>
       <BarChart
         width={window.innerWidth - 100}
         height={200}
