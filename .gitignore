@@ -6,3 +6,4 @@ client/node_modules
 client/dist
 client/coverage
 client/.cache
+client/.env
