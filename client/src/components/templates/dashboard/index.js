@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout, Icon } from "antd";
 
-const { Footer, Content } = Layout;
+const { Footer, Content, Header } = Layout;
 
 export default props => {
   const styles = {
@@ -9,17 +9,23 @@ export default props => {
       minHeight: "100vh",
       background: "#FFFFFF",
     },
+    header: {
+      background: "#4775DE",
+      color: "white",
+      textAlign: "center",
+    },
     footer: {
       background: "#FFFFFF",
       textAlign: "center",
     },
   };
 
-  const { layout, footer } = styles;
+  const { layout, footer, header } = styles;
 
   return (
     <div>
       <Layout style={layout}>
+        <Header style={header}>Decidata.tv</Header>
         <Content>{props.children}</Content>
         <Footer style={footer}>
           By&nbsp;
