@@ -22,7 +22,7 @@ const styles = {
 };
 const { container, chart } = styles;
 
-export default props => {
+export default () => {
   return (
     <div style={container}>
       <BarChart
