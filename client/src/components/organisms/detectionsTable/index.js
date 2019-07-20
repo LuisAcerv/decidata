@@ -9,7 +9,7 @@ const styles = {
 
 const { table } = styles;
 
-export default props => {
+export default () => {
   return (
     <DetectionsContext.Consumer>
       {context => (
