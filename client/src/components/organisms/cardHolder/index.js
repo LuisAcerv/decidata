@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row, Icon, Statistic } from "antd";
+import { Col, Row, Statistic } from "antd";
 import moment from "moment";
 import { Card } from "../../ molecules";
 import DetectionsContext from "../../../context/context";
@@ -57,10 +57,17 @@ export default () => {
                 title="Day with most detections"
                 content={
                   <Statistic
-                    title={moment(
-                      context.dateWithMoreDetections.name,
-                      "YYYY-MM-DD HH:mm:ss"
-                    ).format("dddd")}
+                    title={
+                      moment(
+                        context.dateWithMoreDetections.name,
+                        "YYYY-MM-DD HH:mm:ss"
+                      ).format("dddd") === "Invalid date"
+                        ? ""
+                        : moment(
+                            context.dateWithMoreDetections.name,
+                            "YYYY-MM-DD HH:mm:ss"
+                          ).format("dddd")
+                    }
                     value={context.dateWithMoreDetections.count}
                   />
                 }
