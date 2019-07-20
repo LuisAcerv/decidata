@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import moment from "moment";
 import DetectionsContext from "./context";
 
 export default class DetectionsProvider extends Component {
@@ -9,6 +8,7 @@ export default class DetectionsProvider extends Component {
       columns: [],
       dataSource: [],
     },
+    channelWithMoreDetections: "",
   };
 
   componentDidMount() {
@@ -18,29 +18,20 @@ export default class DetectionsProvider extends Component {
   // Get all detections and process for table
   getAllDetections = () => {
     axios.get(process.env.API_ENDPOINT).then(resp => {
-      // Create columns object
       const columnsKeys = resp.data[0];
-      const columns = [];
-      const dataSource = [];
-      Object.keys(columnsKeys).map(item => {
-        if (item !== "id") {
-          columns.push({
-            title: item,
-            dataIndex: item,
-            key: item,
-            sorter: (a, b) => a[item].length - b[item].length,
-            sortDirections: ["descend"],
-          });
-        }
-      });
+
+      const columns = this.mapColumns(columnsKeys);
 
       // Remove first item containing keys
       delete resp.data[0];
 
       // Map data in order to add the key index to the object
-      resp["data"].map(({ brand, channel, commercial, date }, index) => {
-        dataSource.push({ brand, channel, commercial, date, key: index });
-      });
+      const dataSource = this.mapDataSource(resp.data);
+
+      // Map channels
+      console.log(this.getChannelWithMoreDetections(resp.data));
+      console.log(this.getBrandWithMoreDetections(resp.data));
+      console.log(this.getCommercialWithMoreDetections(resp.data));
 
       // Save processed data to the state
       this.setState(data => ({
@@ -57,11 +48,73 @@ export default class DetectionsProvider extends Component {
     });
   };
 
+  mapColumns = columnsKeys => {
+    const columns = [];
+    Object.keys(columnsKeys).map(item => {
+      if (item !== "id") {
+        columns.push({
+          title: this.jsUcfirst(item),
+          dataIndex: item,
+          key: item,
+          sorter: (a, b) => a[item].length - b[item].length,
+          sortDirections: ["descend"],
+        });
+      }
+    });
+
+    return columns;
+  };
+
+  mapDataSource = data => {
+    const dataSource = [];
+
+    data.map(({ brand, channel, commercial, date }, index) => {
+      dataSource.push({ brand, channel, commercial, date, key: index });
+    });
+
+    return dataSource;
+  };
+
+  jsUcfirst = string => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  getChannelWithMoreDetections = data => {
+    const counts = {};
+    if (data) {
+      data.map(({ channel }) => {
+        counts[channel] = (counts[channel] || 0) + 1;
+      });
+    }
+    return counts;
+  };
+
+  getBrandWithMoreDetections = data => {
+    const counts = {};
+    if (data) {
+      data.map(({ brand }) => {
+        counts[brand] = (counts[brand] || 0) + 1;
+      });
+    }
+    return counts;
+  };
+
+  getCommercialWithMoreDetections = data => {
+    const counts = {};
+    if (data) {
+      data.map(({ commercial }) => {
+        counts[commercial] = (counts[commercial] || 0) + 1;
+      });
+    }
+    return counts;
+  };
+
   render() {
     return (
       <DetectionsContext.Provider
         value={{
           detections: this.state.detections,
+          channelWithMoreViews: this.state.channelWithMoreViews,
         }}
       >
         {this.props.children}
